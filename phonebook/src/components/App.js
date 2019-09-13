@@ -59,7 +59,8 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
-    if (!persons.map(person => person.name).includes(newName)) {
+    const matchedPerson = persons.filter(person => person.name === newName)
+    if (matchedPerson.length === 0) {
       const newPerson = {
         name: newName,
         number: newNumber
@@ -71,8 +72,23 @@ const App = () => {
           setNewName('')
           setNewNumber('')
         })
-    } else {
+    } else if (matchedPerson[0].number === newNumber || newNumber === '') {
       alert(`${newName} is already added to the phonebook`)
+    } else {
+      const confirm = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
+      if (confirm) {
+        const updatedPerson = {
+          name: newName,
+          number: newNumber
+        }
+        personService.update(matchedPerson[0].id, updatedPerson).then(returnedPerson => {
+          setPersons(persons.map(
+            person => person.id === matchedPerson[0].id ? returnedPerson : person
+          ))
+          setNewName('')
+          setNewNumber('')
+        })
+      }
     }
   }
 
