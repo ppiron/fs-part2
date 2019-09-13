@@ -23,10 +23,10 @@ const PersonForm = ({ onSubmit, onNameChange, onNumberChange, newName, newNumber
   )
 }
 
-const Persons = ({ persons, filter }) => {
+const Persons = ({ persons, filter, onDelete }) => {
   return (
     persons.map(person => (
-      person.name.toLowerCase().includes(filter) ? <p key={person.name}>{person.name} {person.number}</p> : null
+      person.name.toLowerCase().includes(filter) ? <p key={person.name}>{person.name} {person.number} <button onClick={event => onDelete(person.id, person.name)}>delete</button></p> : null
     ))
   )
 }
@@ -76,6 +76,15 @@ const App = () => {
     }
   }
 
+  const onDelete = (id, name) => {
+    const confirm = window.confirm(`Delete ${name}?`)
+    if (confirm) {
+      personService.del(id).then(() => personService.getAll().then(initialPersons => {
+        setPersons(initialPersons)
+      }))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -83,7 +92,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm newName={newName} newNumber={newNumber} onSubmit={handleSubmit} onNameChange={onNameChange} onNumberChange={onNumberChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} onDelete={onDelete} />
     </div>
   )
 }
