@@ -31,11 +31,24 @@ const Persons = ({ persons, filter, onDelete }) => {
   )
 }
 
+const Notification = ({ message }) => {
+  if (message === '') {
+    return null
+  } else {
+    return (
+      <div className="notification">
+        {message}
+      </div>
+    )
+  }
+}
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     personService
@@ -71,6 +84,8 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setMessage(`${returnedPerson.name} added to the phonebook`)
+          window.setTimeout(() => setMessage(``), 2500)
         })
     } else if (matchedPerson[0].number === newNumber || newNumber === '') {
       alert(`${newName} is already added to the phonebook`)
@@ -87,6 +102,8 @@ const App = () => {
           ))
           setNewName('')
           setNewNumber('')
+          setMessage(`Number of ${returnedPerson.name} changed`)
+          window.setTimeout(() => setMessage(``), 2500)
         })
       }
     }
@@ -107,6 +124,7 @@ const App = () => {
       <Filter filter={filter} onFilterChange={filterBook} />
       <h2>add a new</h2>
       <PersonForm newName={newName} newNumber={newNumber} onSubmit={handleSubmit} onNameChange={onNameChange} onNumberChange={onNumberChange} />
+      <Notification message={message} />
       <h2>Numbers</h2>
       <Persons persons={persons} filter={filter} onDelete={onDelete} />
     </div>
