@@ -59,9 +59,17 @@ const App = () => {
   const handleSubmit = event => {
     event.preventDefault()
     if (!persons.map(person => person.name).includes(newName)) {
-      setPersons(persons.concat({ name: newName, number: newNumber }))
-      setNewName('')
-      setNewNumber('')
+      const newPerson = {
+        name: newName,
+        number: newNumber
+      }
+      axios
+        .post('http://localhost:3001/persons', newPerson)
+        .then(() => {
+          setPersons(persons.concat(newPerson))
+          setNewName('')
+          setNewNumber('')
+        })
     } else {
       alert(`${newName} is already added to the phonebook`)
     }
