@@ -36,8 +36,20 @@ const Notification = ({ message }) => {
     return null
   } else {
     return (
-      <div className="notification">
+      <div className={`notification`}>
         {message}
+      </div>
+    )
+  }
+}
+
+const ErrorNotification = ({ errorMessage }) => {
+  if (errorMessage === '') {
+    return null
+  } else {
+    return (
+      <div className={`notification error`}>
+        {errorMessage}
       </div>
     )
   }
@@ -49,6 +61,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   useEffect(() => {
     personService
@@ -105,6 +118,10 @@ const App = () => {
           setMessage(`Number of ${returnedPerson.name} changed`)
           window.setTimeout(() => setMessage(``), 2500)
         })
+          .catch(error => {
+            setErrorMessage(`Information of ${matchedPerson[0].name} has already been removed from the server`)
+            // window.setTimeout(() => setErrorMessage(``), 2500)
+          })
       }
     }
   }
@@ -125,6 +142,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm newName={newName} newNumber={newNumber} onSubmit={handleSubmit} onNameChange={onNameChange} onNumberChange={onNumberChange} />
       <Notification message={message} />
+      <ErrorNotification errorMessage={errorMessage} />
       <h2>Numbers</h2>
       <Persons persons={persons} filter={filter} onDelete={onDelete} />
     </div>
