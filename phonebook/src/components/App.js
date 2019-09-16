@@ -85,6 +85,14 @@ const App = () => {
 
   const handleSubmit = event => {
     event.preventDefault()
+    if (newName === '') {
+      alert(`error: missing name`)
+      return
+    }
+    if (newNumber === '') {
+      alert(`error: missing number`)
+      return
+    }
     const matchedPerson = persons.filter(person => person.name === newName)
     if (matchedPerson.length === 0) {
       const newPerson = {
@@ -100,7 +108,8 @@ const App = () => {
           setMessage(`${returnedPerson.name} added to the phonebook`)
           window.setTimeout(() => setMessage(``), 2500)
         })
-    } else if (matchedPerson[0].number === newNumber || newNumber === '') {
+        .catch(error => console.log(error))
+    } else if (matchedPerson[0].number === newNumber) {
       alert(`${newName} is already added to the phonebook`)
     } else {
       const confirm = window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)
