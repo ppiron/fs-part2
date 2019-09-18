@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://x9csh.sse.codesandbox.io/api/persons'
+const baseUrl = 'https://fs-react-pp.herokuapp.com/api/persons'
 
 const getAll = () => {
   return axios.get(baseUrl).then(response => response.data)
