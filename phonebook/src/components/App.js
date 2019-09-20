@@ -108,7 +108,10 @@ const App = () => {
           setMessage(`${returnedPerson.name} added to the phonebook`)
           window.setTimeout(() => setMessage(``), 2500)
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error.response.data.error)
+          setErrorMessage(`${error.response.data.error}`)
+        })
     } else if (matchedPerson[0].number === newNumber) {
       alert(`${newName} is already added to the phonebook`)
     } else {
